@@ -286,21 +286,16 @@ export default function HomePage() {
         </Link>
       ) : null}
 
-      <section className="card stack-sm important-day-card">
+      <section className="card stack-sm important-day-card countdown-card">
         <div className="section-head">
-          <h3 className="page-title">{t("importantDays")}</h3>
-          <span className="tag">{t("onlyOne")}</span>
+          <h3 className="page-title">{language === "en" ? "Countdown" : "倒数日"}</h3>
+          <Link className="tag" to="/anniversaries">
+            {language === "en" ? "Manage" : "管理"}
+          </Link>
         </div>
         {next ? (
-          <Link className="important-day-link" to="/anniversaries">
-            <div className="feature-row">
-              <div>
-                <p className="feature-title">{next.title}</p>
-                <p className="muted">{next.nextDate}</p>
-              </div>
-              <div className="feature-badge">{next.diff === 0 ? (language === "en" ? "Today" : "今天") : (language === "en" ? "Soon" : "即将到来")}</div>
-            </div>
-            <p className="copy">
+          <Link className="important-day-link countdown-link" to="/anniversaries">
+            <p className="countdown-copy">
               {next.diff === 0
                 ? language === "en"
                   ? `${next.title} is today`
@@ -309,7 +304,6 @@ export default function HomePage() {
                   ? `${next.diff} days until ${next.title}`
                   : `距离 ${next.title} 还有 ${next.diff} 天`}
             </p>
-            <p className="meta-line">{repeatLabels[language][next.repeatType || "none"]}</p>
           </Link>
         ) : (
           <Link className="copy" to="/anniversaries">

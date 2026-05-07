@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
 
@@ -73,6 +73,7 @@ export default function ProfilePage() {
     partnerUser,
     updateProfile,
     updatePassword,
+    ensureInviteCode,
     uploadImage,
     logout,
     language,
@@ -99,6 +100,8 @@ export default function ProfilePage() {
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("success");
   const [isSaving, setIsSaving] = useState(false);
+  const [easterEggOpen, setEasterEggOpen] = useState(false);
+  const inviteEnsureKeyRef = useRef("");
 
   useEffect(() => {
     setForm({
@@ -125,6 +128,23 @@ export default function ProfilePage() {
     document.documentElement.dataset.theme = theme;
     localStorage.setItem(THEME_STORAGE_KEY, theme);
   }, [theme]);
+
+  useEffect(() => {
+    if (panel !== "couple" || currentCouple?.inviteCode || !currentCouple?.id) return;
+    if (inviteEnsureKeyRef.current === currentCouple.id) return;
+    inviteEnsureKeyRef.current = currentCouple.id;
+
+    let isMounted = true;
+    ensureInviteCode().then((result) => {
+      if (!isMounted || result.ok) return;
+      setMessageType("error");
+      setMessage(result.message);
+    });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [currentCouple?.inviteCode, ensureInviteCode, panel]);
 
   function setField(field, value) {
     setForm((current) => ({ ...current, [field]: value }));
@@ -237,6 +257,31 @@ export default function ProfilePage() {
     navigate("/login");
   }
 
+  async function handleCopyInviteCode() {
+    let code = currentCouple?.inviteCode;
+
+    if (!currentCouple?.inviteCode) {
+      const result = await ensureInviteCode();
+      if (!result.ok) {
+        setMessageType("error");
+        setMessage(result.message);
+        return;
+      }
+      code = result.inviteCode;
+    }
+
+    if (!code) return;
+
+    try {
+      await navigator.clipboard.writeText(code);
+      setMessageType("success");
+      setMessage("恋爱空间代码已复制。");
+    } catch {
+      setMessageType("success");
+      setMessage(`恋爱空间代码：${code}`);
+    }
+  }
+
   const panelTitle = {
     main: t("settings"),
     profile: t("profile"),
@@ -264,7 +309,7 @@ export default function ProfilePage() {
             <Icon name="logout" />
           </button>
         ) : (
-          <button className="icon-button" type="button" onClick={() => setPanel("main")} aria-label="返回">
+          <button className="icon-button back-icon-button" type="button" onClick={() => setPanel("main")} aria-label="返回">
             <Icon name="back" />
           </button>
         )}
@@ -306,7 +351,12 @@ export default function ProfilePage() {
             <SettingsItem icon="lock" title={t("account")} value={t("passwordLogout")} onClick={() => setPanel("account")} />
           </section>
 
-          <p className="settings-version">{t("version")}</p>
+          <div className="settings-signature">
+            <button className="settings-version settings-version-button" type="button" onClick={() => setEasterEggOpen(true)}>
+              {t("version")}
+            </button>
+            <p>Made with love by zhiyue3197</p>
+          </div>
         </>
       ) : null}
 
@@ -363,6 +413,15 @@ export default function ProfilePage() {
 
       {panel === "couple" ? (
         <section className="card stack-sm profile-form-card">
+          <div className="invite-panel love-space-code-card">
+            <p className="muted">恋爱空间代码</p>
+            <h3 className="invite-code">{currentCouple?.inviteCode || "------"}</h3>
+            <p className="copy">把这串代码发给另一半，对方注册后输入代码就可以加入同一个空间。</p>
+            <button className="secondary-button full-width" type="button" onClick={handleCopyInviteCode}>
+              {currentCouple?.inviteCode ? "复制代码" : "生成代码"}
+            </button>
+          </div>
+
           <div className="settings-row icon-input-row">
             <Icon name="calendar" />
             <input
@@ -447,6 +506,15 @@ export default function ProfilePage() {
             <span>{t("logout")}</span>
           </button>
         </section>
+      ) : null}
+
+      {easterEggOpen ? (
+        <button className="easter-egg-overlay" type="button" onClick={() => setEasterEggOpen(false)} aria-label="关闭彩蛋">
+          <span className="easter-egg-card">
+            <span className="easter-egg-kicker">NeedU</span>
+            <strong>Built with love, for Chenjie.</strong>
+          </span>
+        </button>
       ) : null}
     </div>
   );

@@ -2,6 +2,18 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
 
+function Icon({ name }) {
+  const icons = {
+    back: "M15 18l-6-6 6-6M9 12h12",
+  };
+
+  return (
+    <svg aria-hidden="true" className="ui-icon" viewBox="0 0 24 24">
+      <path d={icons[name]} />
+    </svg>
+  );
+}
+
 export default function RegisterPage() {
   const navigate = useNavigate();
   const { register, isSupabaseConfigured } = useApp();
@@ -71,10 +83,10 @@ export default function RegisterPage() {
           注册并继续
         </button>
 
-        <div className="auth-footer">
+        <div className="auth-footer auth-footer-icon">
           <p className="muted">已经有账号了？</p>
-          <Link className="link-line" to="/login">
-            返回登录
+          <Link className="icon-button auth-back-button" to="/login" aria-label="返回登录">
+            <Icon name="back" />
           </Link>
         </div>
       </form>

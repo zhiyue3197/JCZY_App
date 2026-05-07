@@ -30,7 +30,7 @@ export default function LoginPage() {
             <span>爱你，需要你</span>
           </h1>
           <p className="copy">
-            一个给异地情侣准备的温柔角落，用来记录日常、回应情绪，也把重要时刻慢慢留下。
+            即使分隔两地，我们都会以不同的形式参与到彼此的生活。
           </p>
         </div>
         <div className="auth-note">

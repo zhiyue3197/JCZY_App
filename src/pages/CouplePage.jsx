@@ -24,12 +24,11 @@ export default function CouplePage() {
       <section className="card hero-card auth-hero">
         <div className="stack-sm">
           <p className="eyebrow">Couple Space</p>
-          <h1 className="hero-title">把两个人放进同一个空间</h1>
-          <p className="copy">你可以先创建情侣空间，再把邀请码发给对方；也可以直接输入对方的邀请码加入。</p>
+          <h1 className="hero-title couple-hero-title">把两个人放进同一个空间</h1>
         </div>
         <div className="auth-note">
           <span className="auth-note-dot" />
-          <p>一个账号只能属于一个情侣空间，一个情侣空间最多 2 人。</p>
+          <p>你可以先创建情侣空间，再把邀请码发给对方；也可以直接输入对方的邀请码加入。</p>
         </div>
       </section>
 

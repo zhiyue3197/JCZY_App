@@ -61,13 +61,17 @@ export default function DiaryListPage() {
           <p className="eyebrow">{t("diary")}</p>
           <h2>{t("diarySmall")}</h2>
         </div>
-        <Link className="icon-button" to={todaysDiary ? `/diary/edit/${todaysDiary.id}` : "/diary/new"} aria-label={t("writeDiary")}>
+        <Link
+          className="icon-button"
+          to={todaysDiary ? `/diary/edit/${todaysDiary.id}` : "/diary/new"}
+          aria-label={t("writeDiary")}
+        >
           <Icon name={todaysDiary ? "edit" : "plus"} />
         </Link>
       </header>
 
-      <section className="card diary-intro">
-        <div className="mood-stats mood-stats-cute">
+      <section className="card diary-intro mood-summary-card">
+        <div className="mood-stats mood-stats-cute mood-stats-compact">
           {moodCounts.map((item) => (
             <div className="mood-stat" key={item.mood}>
               <small>{moodMeta[item.mood].label}</small>

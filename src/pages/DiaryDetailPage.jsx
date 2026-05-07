@@ -20,7 +20,6 @@ function Icon({ name }) {
     back: "M15 18l-6-6 6-6M9 12h12",
     edit: "M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5Z",
     trash: "M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14",
-    send: "M22 2 11 13M22 2l-7 20-4-9-9-4 20-7Z",
   };
 
   return (
@@ -77,6 +76,8 @@ export default function DiaryDetailPage() {
 
   async function handleReplySubmit(event) {
     event.preventDefault();
+    if (!replyContent.trim()) return;
+
     const result = await saveDiaryReply({ diaryId: diary.id, content: replyContent });
 
     if (!result.ok) {
@@ -106,15 +107,16 @@ export default function DiaryDetailPage() {
   }
 
   return (
-    <div className="stack-lg">
+    <div className="stack-md diary-detail-view">
       <header className="diary-detail-header">
         <div className="diary-title-block">
-          <p className="eyebrow">{diary.diaryDate}</p>
           <div className="diary-title-with-avatar">
             <UserDot user={author} />
-            <h2>{author?.nickname || t("partner")}{t("diaryOf")}</h2>
+            <div>
+              <p className="eyebrow">{diary.diaryDate}</p>
+              <h2>{author?.nickname || t("partner")}</h2>
+            </div>
           </div>
-          <MoodPill mood={diary.mood} />
         </div>
         <div className="icon-actions">
           {diary.authorId === currentUser?.id ? (
@@ -127,11 +129,13 @@ export default function DiaryDetailPage() {
               </button>
             </>
           ) : null}
-          <Link className="icon-button" to="/diary" aria-label="返回">
+          <Link className="icon-button back-icon-button" to="/diary" aria-label="返回">
             <Icon name="back" />
           </Link>
         </div>
       </header>
+
+      <MoodPill mood={diary.mood} />
 
       <section className={`card stack-md diary-detail-card ${ownerClass}`}>
         {images.length > 0 ? (
@@ -150,19 +154,17 @@ export default function DiaryDetailPage() {
         </div>
       </section>
 
-      <form className={`card reply-panel compact-reply-panel ${ownerClass}`} onSubmit={handleReplySubmit}>
-        <textarea
-          rows={3}
+      <form className={`card reply-panel compact-reply-panel reply-enter-panel ${ownerClass}`} onSubmit={handleReplySubmit}>
+        <input
+          type="text"
           maxLength={300}
+          enterKeyHint="send"
           placeholder={t("writeComment")}
           value={replyContent}
           onChange={(event) => setReplyContent(event.target.value)}
         />
-        <button className="icon-submit-button" type="submit" aria-label="发送评论">
-          <Icon name="send" />
-        </button>
       </form>
-      {message ? <p className={`form-message ${message.includes("已") ? "success-text" : "error-text"}`}>{message}</p> : null}
+      {message ? <p className={`form-message ${message === t("saved") ? "success-text" : "error-text"}`}>{message}</p> : null}
 
       {replies.length > 0 ? (
         <section className="card stack-sm comments-card">

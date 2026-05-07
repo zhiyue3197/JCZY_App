@@ -55,6 +55,12 @@
   box-sizing: border-box;
 }
 
+*,
+*::before,
+*::after {
+  min-width: 0;
+}
+
 html,
 body,
 #root {
@@ -79,6 +85,7 @@ input,
 select,
 textarea {
   font: inherit;
+  max-width: 100%;
 }
 
 button {
@@ -118,10 +125,10 @@ textarea {
   width: min(100%, 440px);
   height: min(860px, calc(100vh - 48px));
   min-height: 640px;
-  background: rgba(255, 253, 248, 0.96);
-  border: 1px solid rgba(20, 20, 24, 0.06);
-  border-radius: 46px;
-  box-shadow: var(--shadow);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
   overflow: hidden;
   position: relative;
   display: flex;
@@ -141,8 +148,10 @@ textarea {
 .screen-content {
   flex: 1;
   min-height: 0;
+  width: 100%;
   padding: 32px 24px 112px;
   overflow-y: auto;
+  overflow-x: hidden;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
   animation: pageIn 220ms ease both;
@@ -151,8 +160,10 @@ textarea {
 .auth-content {
   flex: 1;
   min-height: 0;
+  width: 100%;
   padding: 30px 22px 40px;
   overflow-y: auto;
+  overflow-x: hidden;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
   animation: pageIn 220ms ease both;
@@ -168,6 +179,7 @@ textarea {
 .stack-sm,
 .stack-xs {
   display: grid;
+  min-width: 0;
 }
 
 .stack-lg {
@@ -191,6 +203,8 @@ textarea {
 }
 
 .card {
+  width: 100%;
+  min-width: 0;
   background: var(--block-gradient);
   border: 1px solid var(--line);
   border-radius: 34px;
@@ -233,6 +247,11 @@ textarea {
   font-weight: 900;
 }
 
+.couple-hero-title {
+  font-size: 31px;
+  white-space: nowrap;
+}
+
 .page-title {
   font-size: 24px;
   font-weight: 900;
@@ -252,6 +271,7 @@ textarea {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  min-width: 0;
 }
 
 .compact-topbar {
@@ -259,6 +279,14 @@ textarea {
   align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
+  min-width: 0;
+}
+
+.section-head > :first-child,
+.row-between > :first-child,
+.topbar > :first-child,
+.compact-topbar > :first-child {
+  min-width: 0;
 }
 
 .compact-topbar h2 {
@@ -281,6 +309,10 @@ textarea {
   font-size: 12px;
   font-weight: 800;
   border: 1px solid rgba(32, 32, 36, 0.06);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .primary-button,
@@ -288,6 +320,7 @@ textarea {
 .ghost-button,
 .nav-button,
 .chip-button {
+  min-width: 0;
   border-radius: 22px;
   padding: 13px 16px;
   transition: 160ms ease;
@@ -393,10 +426,19 @@ textarea {
   margin: 0;
 }
 
+.auth-footer-icon {
+  gap: 10px;
+}
+
+.auth-back-button,
+.back-icon-button {
+  border-radius: 50%;
+}
+
 .weather-grid,
 .double-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
 }
 
@@ -460,6 +502,27 @@ textarea {
   font-size: 34px;
   letter-spacing: 0;
   color: var(--purple-deep);
+}
+
+.love-space-code-card {
+  display: grid;
+  gap: 10px;
+  text-align: left;
+  background: var(--theme-soft, #fff8ea);
+  border-color: var(--theme-line);
+}
+
+.love-space-code-card .invite-code {
+  margin: 0;
+  color: var(--ink);
+  font-size: 30px;
+  letter-spacing: 0.12em;
+  text-align: center;
+}
+
+.love-space-code-card .copy {
+  font-size: 13px;
+  line-height: 1.6;
 }
 
 .status-box {
@@ -536,8 +599,8 @@ textarea {
   min-height: 170px;
   padding: 26px;
   border-radius: 28px;
-  background: rgba(255, 255, 255, 0.74);
-  backdrop-filter: blur(2px);
+  background: rgba(255, 254, 250, 0.82);
+  backdrop-filter: blur(1px);
   box-shadow: none;
   align-content: center;
 }
@@ -546,7 +609,7 @@ textarea {
 .home-hero-photo .highlight-number,
 .home-hero-photo .copy {
   color: #373238;
-  text-shadow: 0 1px 12px rgba(255, 255, 255, 0.9);
+  text-shadow: none;
 }
 
 .home-hero-photo .highlight-number {
@@ -587,6 +650,10 @@ textarea {
 }
 
 .feature-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
   padding: 8px 12px;
   border-radius: 999px;
   background: var(--pink-soft);
@@ -594,6 +661,9 @@ textarea {
   font-size: 12px;
   font-weight: 900;
   border: 1px solid rgba(32, 32, 36, 0.04);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .important-day-card {
@@ -608,7 +678,7 @@ textarea {
 
 .action-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
 }
 
@@ -655,6 +725,11 @@ textarea {
 
 .diary-intro {
   background: var(--block-gradient-blush);
+}
+
+.mood-summary-card {
+  padding: 14px 12px;
+  border-radius: 28px;
 }
 
 .diary-list-card {
@@ -705,7 +780,7 @@ textarea {
 
 .mood-stats {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 8px;
 }
 
@@ -747,6 +822,29 @@ textarea {
 .mood-stats-cute .mood-stat strong {
   font-size: 22px;
   line-height: 1;
+}
+
+.mood-stats-compact {
+  gap: 6px;
+}
+
+.mood-stats-compact .mood-stat {
+  min-height: 48px;
+  gap: 2px;
+  padding: 8px 3px 7px;
+  border-radius: 16px;
+  background: rgba(255, 248, 234, 0.78);
+}
+
+.mood-stats-compact .mood-stat small {
+  font-size: 12px;
+  line-height: 1;
+  font-weight: 850;
+}
+
+.mood-stats-compact .mood-stat span {
+  font-size: 10px;
+  opacity: 0.62;
 }
 
 .mood-pill {
@@ -908,14 +1006,14 @@ textarea {
 
 .diary-reading p {
   margin: 0;
-  line-height: 1.9;
+  line-height: 1.75;
 }
 
 .diary-detail-header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 10px;
 }
 
 .diary-title-block {
@@ -923,15 +1021,19 @@ textarea {
 }
 
 .diary-detail-header h2 {
-  margin: 0;
-  font-size: 25px;
-  line-height: 1.2;
+  margin: 2px 0 0;
+  font-size: 20px;
+  line-height: 1.15;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .icon-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   flex: 0 0 auto;
 }
 
@@ -941,6 +1043,7 @@ textarea {
   place-items: center;
   width: 46px;
   height: 46px;
+  flex: 0 0 auto;
   border-radius: 18px;
   border: 1px solid rgba(32, 32, 36, 0.08);
   background: #ffffff;
@@ -958,17 +1061,42 @@ textarea {
 }
 
 .diary-detail-card {
-  padding: 20px;
+  padding: 18px;
   background: var(--block-gradient-warm);
+}
+
+.diary-detail-view {
+  gap: 14px;
+}
+
+.diary-detail-view > .mood-pill {
+  padding: 7px 11px;
+  font-size: 12px;
+}
+
+.diary-detail-view .icon-button {
+  width: 42px;
+  height: 42px;
+  border-radius: 16px;
+}
+
+.diary-detail-view .user-dot {
+  width: 34px;
+  height: 34px;
 }
 
 .compact-reply-panel {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   gap: 10px;
   align-items: end;
   padding: 10px;
   border-radius: 26px;
+}
+
+.reply-enter-panel {
+  grid-template-columns: minmax(0, 1fr);
+  padding: 8px;
 }
 
 .compact-reply-panel textarea {
@@ -976,6 +1104,13 @@ textarea {
   max-height: 96px;
   border-radius: 20px;
   padding: 13px 14px;
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.reply-enter-panel input {
+  height: 50px;
+  border-radius: 999px;
+  padding: 0 18px;
   background: rgba(255, 255, 255, 0.78);
 }
 
@@ -1162,7 +1297,7 @@ textarea {
 
 .album-thumb-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
 }
 
@@ -1276,9 +1411,9 @@ textarea {
 
 .profile-pair {
   display: grid;
-  grid-template-columns: 1fr 44px 1fr;
+  grid-template-columns: minmax(0, 1fr) 34px minmax(0, 1fr);
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .profile-person {
@@ -1334,7 +1469,7 @@ textarea {
 .settings-item {
   width: 100%;
   display: grid;
-  grid-template-columns: 44px 1fr auto;
+  grid-template-columns: 42px minmax(0, 1fr) auto;
   align-items: center;
   gap: 14px;
   padding: 18px;
@@ -1380,6 +1515,68 @@ textarea {
 .settings-version {
   margin: 0;
   text-align: center;
+}
+
+.settings-signature {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  color: var(--muted);
+}
+
+.settings-signature p {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 700;
+  opacity: 0.8;
+}
+
+.settings-version-button {
+  justify-self: center;
+  width: fit-content;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: transparent;
+}
+
+.settings-version-button:hover {
+  background: var(--theme-soft);
+}
+
+.easter-egg-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(34, 30, 24, 0.18);
+  backdrop-filter: blur(6px);
+}
+
+.easter-egg-card {
+  display: grid;
+  gap: 12px;
+  width: min(100%, 310px);
+  padding: 28px 24px;
+  border-radius: 30px;
+  background: var(--theme-card);
+  border: 1px solid var(--theme-line);
+  box-shadow: 0 28px 70px var(--theme-shadow-strong);
+  color: var(--ink);
+  text-align: center;
+  animation: softPop 220ms ease both;
+}
+
+.easter-egg-kicker {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.easter-egg-card strong {
+  font-size: 20px;
+  line-height: 1.35;
 }
 
 .settings-subgroup {
@@ -1542,7 +1739,7 @@ textarea {
 
 .profile-avatars {
   display: grid;
-  grid-template-columns: 1fr 46px 1fr;
+  grid-template-columns: minmax(0, 1fr) 42px minmax(0, 1fr);
   align-items: center;
   gap: 10px;
 }
@@ -1591,6 +1788,17 @@ textarea {
   align-items: flex-start;
   justify-content: space-between;
   gap: 16px;
+}
+
+.anniversary-card-head > div {
+  min-width: 0;
+}
+
+.anniversary-card-head .feature-title,
+.anniversary-card-head .muted,
+.settings-item-main strong,
+.settings-item-main span {
+  overflow-wrap: anywhere;
 }
 
 .bottom-nav {
@@ -1852,6 +2060,24 @@ textarea {
     min-height: 100vh;
     border-radius: 0;
   }
+
+  .screen-content {
+    padding: 28px 16px 104px;
+  }
+
+  .auth-content {
+    padding: 24px 16px 34px;
+  }
+
+  .bottom-nav {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+  }
+
+  .card {
+    border-radius: 28px;
+  }
 }
 
 /* Warm minimalist refresh inspired by soft wellness app layouts. */
@@ -1893,13 +2119,13 @@ body {
 
 .phone-shell {
   background: #fffaf1;
-  border: 10px solid #fffdf8;
-  border-radius: 52px;
-  box-shadow: 0 34px 90px rgba(38, 32, 24, 0.1);
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .screen-content {
-  padding: 34px 26px 116px;
+  padding: 34px 22px 112px;
 }
 
 .topbar h2,
@@ -2045,6 +2271,29 @@ body {
   border-color: rgba(137, 105, 55, 0.12);
 }
 
+.countdown-card {
+  gap: 16px;
+}
+
+.countdown-link {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.countdown-copy {
+  margin: 0;
+  padding: 18px 20px;
+  border-radius: 24px;
+  background: color-mix(in srgb, var(--theme-card) 74%, var(--theme-soft) 26%);
+  color: var(--text);
+  font-size: 17px;
+  line-height: 1.65;
+  font-weight: 850;
+}
+
 .diary-card-female,
 .diary-card-self {
   background: #fffaf1 !important;
@@ -2113,10 +2362,10 @@ textarea {
 }
 
 .bottom-nav {
-  left: 26px;
-  right: 26px;
+  left: 18px;
+  right: 18px;
   bottom: 22px;
-  padding: 10px;
+  padding: 8px;
   background: rgba(255, 253, 246, 0.92);
   border: 1px solid rgba(42, 41, 39, 0.06);
   border-radius: 34px;
@@ -2125,9 +2374,17 @@ textarea {
 }
 
 .nav-button {
+  overflow: hidden;
   border-radius: 28px;
   color: #8a847a;
   font-weight: 900;
+}
+
+.nav-button span {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .nav-button.active {
@@ -2448,8 +2705,8 @@ body {
 }
 
 .phone-shell {
-  background: var(--theme-shell);
-  box-shadow: 0 34px 90px var(--theme-shadow-strong);
+  background: transparent;
+  box-shadow: none;
 }
 
 .card,
@@ -2622,6 +2879,49 @@ textarea,
   background: #e7b886;
 }
 
+.add-icon-button {
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.anniversary-list {
+  padding-bottom: 8px;
+}
+
+.anniversary-summary-card {
+  padding: 22px 20px;
+}
+
+.anniversary-card-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.anniversary-card-actions .ghost-button {
+  justify-content: center;
+  min-height: 42px;
+}
+
+.danger-button {
+  color: #9c5c5c;
+}
+
+.compact-empty-card {
+  display: grid;
+  gap: 14px;
+  padding: 22px;
+}
+
+.anniversary-form-card {
+  padding: 22px 18px;
+}
+
+.anniversary-repeat-control {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .settings-list-card {
   background: var(--theme-card) !important;
   border-color: var(--theme-line);
@@ -2738,7 +3038,7 @@ textarea,
 }
 
 .editor-action-row {
-  grid-template-columns: 50px 1fr;
+  grid-template-columns: 50px minmax(0, 1fr);
   gap: 12px;
 }
 
@@ -2753,4 +3053,206 @@ textarea,
 
 .album-upload-main {
   align-items: center;
+}
+
+/* Final containment pass: keep every screen inside the mobile viewport. */
+.phone-shell,
+.screen-content,
+.auth-content,
+.app-view,
+.card,
+.list-card,
+.paragraph-card,
+.reply-item,
+.settings-list-card {
+  max-width: 100%;
+}
+
+.screen-content,
+.auth-content {
+  overflow-x: hidden;
+}
+
+.section-head,
+.row-between,
+.topbar,
+.compact-topbar,
+.feature-row,
+.anniversary-card-head {
+  max-width: 100%;
+}
+
+.nav-button,
+.settings-item,
+.profile-person,
+.profile-avatar-item,
+.album-thumb-card,
+.mood-stat {
+  min-width: 0;
+}
+
+@media (max-width: 520px) {
+  .screen-content {
+    padding: 28px 16px 104px;
+  }
+
+  .auth-content {
+    padding: 24px 16px 34px;
+  }
+
+  .bottom-nav {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+  }
+}
+
+.home-hero.home-hero-photo {
+  background-image: var(--love-hero-bg) !important;
+  background-position: center !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+}
+
+/* Micro interactions: subtle motion and feedback for a more app-like feel. */
+@media (hover: hover) and (pointer: fine) {
+  .card,
+  .list-card,
+  .settings-item,
+  .album-thumb-button,
+  .image-button,
+  .mood-choice,
+  .theme-swatch {
+    transition:
+      transform 180ms ease,
+      box-shadow 180ms ease,
+      border-color 180ms ease,
+      background-color 180ms ease,
+      filter 180ms ease;
+  }
+
+  .card:hover,
+  .list-card:hover,
+  .settings-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 44px var(--theme-shadow-strong, rgba(54, 45, 34, 0.08));
+  }
+
+  .home-hero:hover {
+    transform: translateY(-3px);
+  }
+
+  .album-thumb-button:hover,
+  .image-button:hover {
+    transform: translateY(-2px) scale(1.015);
+    filter: saturate(1.04);
+  }
+
+  .mood-choice:hover,
+  .theme-swatch:hover,
+  .circle-file-button:hover,
+  .round-upload-button:hover,
+  .icon-field-button:hover {
+    transform: translateY(-1px);
+  }
+}
+
+.primary-button,
+.secondary-button,
+.ghost-button,
+.icon-button,
+.icon-submit-button,
+.circle-file-button,
+.round-upload-button,
+.nav-button,
+.settings-item,
+.mood-choice,
+.segmented-control button,
+.theme-swatch,
+.tiny-text-button {
+  transition:
+    transform 140ms ease,
+    box-shadow 160ms ease,
+    background-color 160ms ease,
+    border-color 160ms ease,
+    opacity 160ms ease;
+}
+
+.primary-button:active,
+.secondary-button:active,
+.ghost-button:active,
+.icon-button:active,
+.icon-submit-button:active,
+.circle-file-button:active,
+.round-upload-button:active,
+.nav-button:active,
+.settings-item:active,
+.mood-choice:active,
+.segmented-control button:active,
+.theme-swatch:active,
+.tiny-text-button:active {
+  transform: scale(0.97);
+}
+
+.nav-button.active {
+  animation: softPop 220ms ease both;
+}
+
+.icon-button:hover,
+.icon-submit-button:hover {
+  border-color: color-mix(in srgb, var(--theme-accent-text) 18%, var(--theme-line));
+  box-shadow: 0 12px 26px var(--theme-shadow);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: color-mix(in srgb, var(--theme-accent-text) 28%, var(--theme-line));
+  box-shadow:
+    0 0 0 4px color-mix(in srgb, var(--theme-accent) 28%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.58);
+}
+
+.reply-enter-panel:focus-within,
+.auth-form-card:focus-within,
+.profile-form-card:focus-within,
+.diary-editor-card:focus-within,
+.anniversary-form-card:focus-within {
+  border-color: color-mix(in srgb, var(--theme-accent-text) 16%, var(--theme-line));
+  box-shadow: 0 20px 48px var(--theme-shadow-strong, rgba(54, 45, 34, 0.08));
+}
+
+.round-upload-button.is-loading,
+.circle-file-button.is-loading {
+  animation: gentlePulse 900ms ease-in-out infinite;
+}
+
+@keyframes softPop {
+  0% {
+    transform: scale(0.94);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes gentlePulse {
+  0%,
+  100% {
+    box-shadow: 0 12px 24px var(--theme-shadow);
+  }
+  50% {
+    box-shadow: 0 0 0 8px color-mix(in srgb, var(--theme-accent) 22%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
 }

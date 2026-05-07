@@ -79,7 +79,7 @@ const translations = {
     me: "我的",
     settings: "设置",
     profile: "个人资料",
-    coupleSettings: "恋爱设置",
+    coupleSettings: "恋爱空间",
     display: "显示",
     account: "账号",
     importantDays: "重要日子",
@@ -107,7 +107,7 @@ const translations = {
     selectedAvatar: "已选头像",
     saveFailed: "保存失败，请稍后再试。",
     passwordUpdated: "密码已更新",
-    version: "NeedU v0.1.0",
+    version: "NeedU v1.0 Beta",
     diarySmall: "小记",
     writeDiary: "写日记",
     editDiary: "编辑日记",
@@ -145,7 +145,7 @@ const translations = {
     me: "Me",
     settings: "Settings",
     profile: "Profile",
-    coupleSettings: "Love Settings",
+    coupleSettings: "Love Space",
     display: "Display",
     account: "Account",
     importantDays: "Important Days",
@@ -173,7 +173,7 @@ const translations = {
     selectedAvatar: "Avatar selected",
     saveFailed: "Save failed. Please try again.",
     passwordUpdated: "Password updated",
-    version: "NeedU v0.1.0",
+    version: "NeedU v1.0 Beta",
     diarySmall: "Notes",
     writeDiary: "Write diary",
     editDiary: "Edit diary",
@@ -903,17 +903,45 @@ export function AppProvider({ children }) {
     return { ok: true };
   }
 
-  async function addAnniversary() {
-    if (!currentCouple) return;
+  async function ensureInviteCode() {
+    if (!currentCouple) return { ok: false, message: "请先创建恋爱空间。" };
+    if (currentCouple.inviteCode) return { ok: true, inviteCode: currentCouple.inviteCode };
+
+    const inviteCode = createInviteCode(new Set(state.couples.map((item) => item.inviteCode).filter(Boolean)));
+
+    if (supabase) {
+      const { error } = await supabase
+        .from("couples")
+        .update({ invite_code: inviteCode })
+        .eq("id", currentCouple.id);
+
+      if (error) return { ok: false, message: error.message };
+    }
+
+    setState((current) => ({
+      ...current,
+      couples: current.couples.map((couple) =>
+        couple.id === currentCouple.id ? { ...couple, inviteCode } : couple,
+      ),
+    }));
+
+    return { ok: true, inviteCode };
+  }
+
+  async function addAnniversary(payload = {}) {
+    if (!currentCouple) return { ok: false, message: "请先完成情侣绑定。" };
 
     const base = {
       coupleId: currentCouple.id,
       title: "新的重要日子",
-      date: todayString(),
-      repeatType: "yearly",
+      date: payload.date || todayString(),
+      repeatType: payload.repeatType || "yearly",
       createdAt: nowString(),
       updatedAt: nowString(),
     };
+    base.title = (payload.title || "").trim();
+
+    if (!base.title) return { ok: false, message: "请填写重要日子的名称。" };
 
     if (supabase) {
       const { data, error } = await supabase
@@ -926,15 +954,18 @@ export function AppProvider({ children }) {
         })
         .select("*")
         .single();
-      if (error) return;
-      setState((current) => ({ ...current, anniversaries: [...current.anniversaries, mapAnniversary(data)] }));
-      return;
+      if (error) return { ok: false, message: error.message };
+      const anniversary = mapAnniversary(data);
+      setState((current) => ({ ...current, anniversaries: [...current.anniversaries, anniversary] }));
+      return { ok: true, id: anniversary.id };
     }
 
+    const anniversary = { id: generateId("ann"), ...base };
     setState((current) => ({
       ...current,
-      anniversaries: [...current.anniversaries, { id: generateId("ann"), ...base }],
+      anniversaries: [...current.anniversaries, anniversary],
     }));
+    return { ok: true, id: anniversary.id };
   }
 
   async function updateAnniversary(id, patch) {
@@ -950,8 +981,10 @@ export function AppProvider({ children }) {
       if (patch.title !== undefined) dbPatch.title = patch.title;
       if (patch.date !== undefined) dbPatch.date = patch.date;
       if (patch.repeatType !== undefined) dbPatch.repeat_type = patch.repeatType;
-      await supabase.from("anniversaries").update(dbPatch).eq("id", id);
+      const { error } = await supabase.from("anniversaries").update(dbPatch).eq("id", id);
+      if (error) return { ok: false, message: error.message };
     }
+    return { ok: true };
   }
 
   async function deleteAnniversary(id) {
@@ -1141,7 +1174,7 @@ export function AppProvider({ children }) {
 
   async function saveAlbumEntry({ albumDate, imageUrl, note }) {
     if (!currentUser || !currentCouple) return { ok: false, message: "请先完成情侣绑定。" };
-    if (!imageUrl.trim()) return { ok: false, message: "请先填写截图链接。" };
+    if (!imageUrl.trim()) return { ok: false, message: "请先填写图片链接。" };
     if (note.trim().length > 100) return { ok: false, message: "备注最多 100 字。" };
 
     const existingEntry = state.albumEntries.find(
@@ -1264,6 +1297,7 @@ export function AppProvider({ children }) {
     joinCouple,
     updateProfile,
     updatePassword,
+    ensureInviteCode,
     addAnniversary,
     updateAnniversary,
     deleteAnniversary,

@@ -1,6 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import AuthLayout from "./components/AuthLayout";
 import MainLayout from "./components/MainLayout";
+import AnniversaryEditorPage from "./pages/AnniversaryEditorPage";
 import AnniversaryPage from "./pages/AnniversaryPage";
 import AlbumPage from "./pages/AlbumPage";
 import CouplePage from "./pages/CouplePage";
@@ -31,6 +32,8 @@ export default function App() {
           <Route path="/album" element={<AlbumPage />} />
           <Route path="/me" element={<ProfilePage />} />
           <Route path="/anniversaries" element={<AnniversaryPage />} />
+          <Route path="/anniversaries/new" element={<AnniversaryEditorPage />} />
+          <Route path="/anniversaries/:id/edit" element={<AnniversaryEditorPage />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/login" replace />} />

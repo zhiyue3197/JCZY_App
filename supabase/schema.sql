@@ -107,6 +107,44 @@ drop constraint if exists diary_replies_diary_id_author_id_key;
 
 drop index if exists public.diary_replies_diary_id_author_id_key;
 
+do $$
+declare
+  diary_attnum smallint;
+  author_attnum smallint;
+  target_constraint text;
+  target_index text;
+begin
+  select attnum into diary_attnum
+  from pg_attribute
+  where attrelid = 'public.diary_replies'::regclass
+    and attname = 'diary_id';
+
+  select attnum into author_attnum
+  from pg_attribute
+  where attrelid = 'public.diary_replies'::regclass
+    and attname = 'author_id';
+
+  for target_constraint in
+    select conname
+    from pg_constraint
+    where conrelid = 'public.diary_replies'::regclass
+      and contype = 'u'
+      and conkey::text = array[diary_attnum, author_attnum]::smallint[]::text
+  loop
+    execute format('alter table public.diary_replies drop constraint if exists %I', target_constraint);
+  end loop;
+
+  for target_index in
+    select indexrelid::regclass::text
+    from pg_index
+    where indrelid = 'public.diary_replies'::regclass
+      and indisunique
+      and indkey::text = concat(diary_attnum, ' ', author_attnum)
+  loop
+    execute format('drop index if exists %s', target_index);
+  end loop;
+end $$;
+
 create table if not exists public.album_entries (
   id uuid primary key default gen_random_uuid(),
   couple_id uuid not null references public.couples(id) on delete cascade,

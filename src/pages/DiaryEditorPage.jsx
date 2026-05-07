@@ -99,7 +99,7 @@ export default function DiaryEditorPage() {
           <p className="eyebrow">{editingDiary ? t("editDiary") : t("writeDiary")}</p>
           <h2>{editingDiary ? t("editALittle") : t("writeALittle")}</h2>
         </div>
-        <Link className="icon-button" to="/diary" aria-label="返回">
+        <Link className="icon-button back-icon-button" to="/diary" aria-label="返回">
           <Icon name="back" />
         </Link>
       </header>
