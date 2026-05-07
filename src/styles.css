@@ -927,9 +927,27 @@ textarea {
   background: var(--block-gradient-orchid);
 }
 
+.diary-editor-topline {
+  display: grid;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
 .diary-editor-topline input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
   padding: 12px 14px;
   border-radius: 16px;
+}
+
+input[type="date"] {
+  min-width: 0;
+  max-width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
 }
 
 .mood-picker {
@@ -1258,7 +1276,8 @@ textarea {
 }
 
 .album-date-input {
-  width: auto;
+  width: 100%;
+  min-width: 0;
   max-width: 190px;
   padding: 10px 12px;
   border-radius: 14px;
@@ -1698,6 +1717,8 @@ textarea {
 }
 
 .icon-input-row input {
+  min-width: 0;
+  max-width: 100%;
   padding-left: 44px;
 }
 
@@ -3235,7 +3256,8 @@ textarea,
 
   .diary-editor-topline input {
     text-align: center;
-    font-size: clamp(16px, 4.7vw, 22px);
+    font-size: clamp(15px, 4.2vw, 18px);
+    line-height: 1.2;
   }
 
   .mood-picker {

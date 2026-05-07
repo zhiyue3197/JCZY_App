@@ -61,7 +61,7 @@ export default function RegisterPage() {
           <span className="label">用户名</span>
           <input
             type="text"
-            placeholder="3-20 位字母、数字或下划线"
+            placeholder="2-20 位中文、字母、数字或下划线"
             value={form.username}
             onChange={(event) => setForm({ ...form, username: event.target.value })}
           />

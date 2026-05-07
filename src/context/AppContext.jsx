@@ -41,15 +41,32 @@ function nowString() {
 }
 
 function normalizeUsername(username) {
-  return username.trim().toLowerCase();
+  return username.trim();
+}
+
+function canonicalUsername(username) {
+  return normalizeUsername(username).toLowerCase();
 }
 
 function isValidUsername(username) {
-  return /^[a-z0-9_]{3,20}$/.test(username);
+  return /^[\p{Script=Han}A-Za-z0-9_]{2,20}$/u.test(username);
+}
+
+function hashUsername(username) {
+  let hash = 2166136261;
+  for (let index = 0; index < username.length; index += 1) {
+    hash ^= username.charCodeAt(index);
+    hash = Math.imul(hash, 16777619);
+  }
+  return (hash >>> 0).toString(36);
 }
 
 function usernameToInternalEmail(username) {
-  return `${normalizeUsername(username)}@needu.local`;
+  const canonical = canonicalUsername(username);
+  if (/^[a-z0-9_]{3,20}$/.test(canonical)) {
+    return `${canonical}@needu.local`;
+  }
+  return `u_${hashUsername(canonical)}@needu.local`;
 }
 
 function getFileExtension(fileName) {
@@ -566,7 +583,7 @@ export function AppProvider({ children }) {
       return { ok: false, message: "请先填写用户名和密码。" };
     }
     if (!isValidUsername(normalizedUsername)) {
-      return { ok: false, message: "用户名只能使用 3-20 位小写字母、数字或下划线。" };
+      return { ok: false, message: "用户名可使用 2-20 位中文、英文字母、数字或下划线。" };
     }
     if (password.length < 6) {
       return { ok: false, message: "密码至少 6 位。" };
