@@ -52,9 +52,27 @@ as $$
   );
 $$;
 
+create or replace function public.can_reply_to_diary(target_diary_id uuid, target_author_id uuid)
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select target_author_id = auth.uid()
+    and exists (
+      select 1
+      from public.diaries d
+      join public.couple_members cm on cm.couple_id = d.couple_id
+      where d.id = target_diary_id
+        and cm.user_id = auth.uid()
+    );
+$$;
+
 grant execute on function public.is_couple_member(uuid) to authenticated;
 grant execute on function public.can_view_profile(uuid) to authenticated;
 grant execute on function public.is_username_available(text) to anon, authenticated;
+grant execute on function public.can_reply_to_diary(uuid, uuid) to authenticated;
 
 drop policy if exists "profiles_select_own" on public.profiles;
 drop policy if exists "profiles_insert_own" on public.profiles;
@@ -201,15 +219,7 @@ using (
 create policy "diary_replies_insert_author" on public.diary_replies
 for insert
 to authenticated
-with check (
-  author_id = auth.uid()
-  and exists (
-    select 1
-    from public.diaries d
-    where d.id = diary_replies.diary_id
-      and public.is_couple_member(d.couple_id)
-  )
-);
+with check (public.can_reply_to_diary(diary_id, author_id));
 
 create policy "diary_replies_update_author" on public.diary_replies
 for update
