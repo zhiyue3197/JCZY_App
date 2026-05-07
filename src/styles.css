@@ -3114,6 +3114,206 @@ textarea,
   background-repeat: no-repeat !important;
 }
 
+/* Mobile text containment: keep long copy and titles inside rounded cards. */
+.card,
+.list-card,
+.paragraph-card,
+.reply-item,
+.settings-list-card,
+.auth-note,
+.invite-panel,
+.status-box,
+.compact-topbar,
+.section-head {
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+.hero-title,
+.page-title,
+.compact-topbar h2,
+.topbar h2,
+.feature-title,
+.invite-code,
+.highlight-number {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  text-wrap: balance;
+}
+
+.couple-hero-title {
+  white-space: normal !important;
+  font-size: clamp(28px, 8vw, 31px);
+  line-height: 1.18;
+}
+
+.auth-note {
+  align-items: flex-start;
+}
+
+.auth-note p,
+.copy,
+.muted,
+.form-message,
+.settings-signature {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.easter-egg-card {
+  max-width: calc(100vw - 48px);
+}
+
+.easter-egg-card strong {
+  display: block;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 520px) {
+  .hero-card,
+  .auth-screen .hero-card,
+  .auth-screen .auth-form-card {
+    padding-left: clamp(20px, 6vw, 28px);
+    padding-right: clamp(20px, 6vw, 28px);
+  }
+
+  .hero-title,
+  .auth-screen .hero-title {
+    font-size: clamp(28px, 8.4vw, 34px);
+  }
+
+  .couple-hero-title {
+    font-size: clamp(27px, 7.8vw, 31px);
+  }
+
+  .auth-note {
+    padding: 14px 16px;
+    border-radius: 24px;
+  }
+
+  .auth-note p {
+    font-size: clamp(15px, 4.2vw, 17px);
+    line-height: 1.72;
+  }
+
+  .section-head {
+    align-items: flex-start;
+  }
+
+  .section-head .page-title {
+    flex: 1 1 auto;
+  }
+
+  .tag,
+  .pill,
+  .feature-badge {
+    flex: 0 1 auto;
+    white-space: normal;
+    text-align: center;
+  }
+
+  .compact-topbar {
+    gap: 12px;
+  }
+
+  .compact-topbar h2 {
+    font-size: clamp(36px, 12vw, 58px);
+    line-height: 1.05;
+  }
+
+  .compact-topbar .back-icon-button {
+    width: clamp(52px, 14vw, 64px);
+    height: clamp(52px, 14vw, 64px);
+    border-radius: 22px;
+  }
+
+  .diary-editor-card {
+    padding: clamp(18px, 5vw, 24px);
+  }
+
+  .diary-editor-topline input {
+    text-align: center;
+    font-size: clamp(16px, 4.7vw, 22px);
+  }
+
+  .mood-picker {
+    gap: 8px 6px;
+  }
+
+  .mood-choice {
+    padding: 9px 2px;
+    border-radius: 18px;
+  }
+
+  .mood-choice small {
+    font-size: clamp(12px, 3.7vw, 16px);
+    line-height: 1.2;
+  }
+
+  .diary-textarea {
+    min-height: 280px;
+    font-size: clamp(16px, 4.5vw, 20px);
+  }
+
+  .editor-action-row {
+    grid-template-columns: clamp(50px, 14vw, 58px) minmax(0, 1fr);
+  }
+
+  .editor-save-button {
+    min-width: 0;
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .editor-save-button span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .easter-egg-overlay {
+    padding: 18px;
+    align-items: start;
+    padding-top: 24vh;
+  }
+
+  .easter-egg-card {
+    width: min(100%, 320px);
+    border-radius: 28px;
+  }
+
+  .easter-egg-card strong {
+    font-size: clamp(20px, 5.8vw, 28px);
+    line-height: 1.24;
+  }
+}
+
+@media (max-width: 380px) {
+  .screen-content,
+  .auth-content {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .hero-title,
+  .auth-screen .hero-title {
+    font-size: clamp(26px, 8vw, 30px);
+  }
+
+  .couple-hero-title {
+    font-size: clamp(25px, 7.4vw, 29px);
+  }
+
+  .auth-note p {
+    font-size: 15px;
+  }
+
+  .page-title {
+    font-size: clamp(22px, 6.5vw, 25px);
+  }
+}
+
 /* Micro interactions: subtle motion and feedback for a more app-like feel. */
 @media (hover: hover) and (pointer: fine) {
   .card,
